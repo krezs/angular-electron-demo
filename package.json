@@ -1,9 +1,15 @@
 {
   "name": "angular-electron-demo",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "main": "main.js",
+  "description": "just a demo angular-electron app for testing into ubuntu core 18/20",
+  "author": "Kr3z",
+  "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start:electron": "electron .",
+    "start:angular": "ng serve",
+    "start:both": "ng build && electron .",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
