@@ -1,6 +1,6 @@
 {
   "name": "angular-electron-demo",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "main.js",
   "description": "just a demo angular-electron app for testing into ubuntu core 18/20",
   "author": "Kr3z",
@@ -20,6 +20,9 @@
     "directories": {
       "output": "release",
       "buildResources": "dist"
+    },
+    "snap": {
+      "plugs": ["browser-support", "network", "network-bind", "opengl", "pulseaudio", "wayland"]
     }
  },
   "private": true,
