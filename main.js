@@ -1,6 +1,8 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path')
+const { networkInterfaces } = require('os');
+
 
 const createWindow = () => {
   // Create the browser window.
@@ -8,7 +10,10 @@ const createWindow = () => {
     width: 800,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
+      nodeIntegration: false,
+      contextIsolation: true,
+      enableRemoteModule: false,
+      preload: path.join(__dirname, "preload.js")
     }
   })
 
@@ -22,7 +27,7 @@ const createWindow = () => {
       mainWindow = null;
   });
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 }
 
 // This method will be called when Electron has finished
@@ -45,5 +50,36 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit()
 })
 
+
+ipcMain.on("ip-request", (event, message) => {
+  const nets = networkInterfaces();
+  const results = Object.create(null); // Or just '{}', an empty object
+  
+  //nets.find(net => net.family == 'IPv4' && !net.internal);
+  let ipAddress;
+  for (const name of Object.keys(nets)) {
+      for (const net of nets[name]) {
+          // Skip over non-IPv4 and internal (i.e. 127.0.0.1) addresses
+          if (net.family === 'IPv4' && !net.internal) {
+              if (!results[name]) {
+                  results[name] = [];
+              }
+              ipAddress = net.address;
+              results[name].push(net.address);
+          }
+      }
+  }
+
+  event.reply("reply", JSON.stringify(results));
+
+});
+
 // In this file you can include the rest of your app's specific main process
 // code. Tu también puedes ponerlos en archivos separados y requerirlos aquí.
+
+
+// ipcMain.on("message", (event, message) => { 
+//   if (message === "ping") {
+//       event.reply("reply", "pong"); 
+//   }
+// });
