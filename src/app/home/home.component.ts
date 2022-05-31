@@ -10,6 +10,7 @@ import { IpcService } from '../services/ipc.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
+  count = 0;
   time = new Date();
   rxTime = new Date();
   intervalId: any;
@@ -56,7 +57,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   listenReply(): void {
-    debugger;
     if (!this.ipcService.isElectron()) {
       return;
     }
@@ -69,7 +69,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   }
 
+  addNum() {
+    this.count++;
+  }
 
+  reset() {
+    this.count = 0;
+  }
 
 
 }
